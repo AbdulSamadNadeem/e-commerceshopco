@@ -10,6 +10,7 @@ import {
   provider,
   signInWithEmailAndPassword,
   signInWithPopup,
+  GoogleAuthProvider
 } from "../../../Auth/Firebase";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -142,3 +143,4 @@ const Forms = ({ data }) => {
 };
 
 export default Forms;
+
