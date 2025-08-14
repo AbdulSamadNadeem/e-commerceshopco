@@ -1,7 +1,6 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { BiShow } from "react-icons/bi";
 import {
@@ -10,72 +9,71 @@ import {
   provider,
   signInWithEmailAndPassword,
   signInWithPopup,
-  GoogleAuthProvider
+  GoogleAuthProvider,
 } from "../../../Auth/Firebase";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+
 const Forms = ({ data }) => {
   const router = useRouter();
-  let num;
+  let num = 0;
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    reset,
   } = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (formData) => {
     try {
-      const userCredenatials = await signInWithEmailAndPassword(
+      const userCredentials = await signInWithEmailAndPassword(
         auth,
-        data.email,
-        data.password
+        formData.email,
+        formData.password
       );
-      if (userCredenatials) {
-        toast.success("SignUp Successfully");
+      if (userCredentials) {
+        toast.success("Login Successfully");
+        router.push("/home");
       }
     } catch (err) {
       toast.error(err.message);
     }
-
-    // ...
   };
+
 
   const GoogleAuth = () => {
     signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        toast.success("SignUp Successfully");
+      .then(() => {
+        toast.success("Login Successfully");
+        router.push("/home"); 
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        toast.error(error.message);
       });
   };
 
+ 
   const showPass = () => {
-    if (num === 1) {
-      document.getElementById("pass").type = "text";
-      num = 0;
+    const passField = document.getElementById("pass");
+    if (passField.type === "password") {
+      passField.type = "text";
     } else {
-      document.getElementById("pass").type = "password";
-      num = 1;
+      passField.type = "password";
     }
   };
-useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      router.push("/home");
-    }
-  });
 
-  return () => unsubscribe();
-}, [router]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User already logged in:", user.email);
+     
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <>
       <div className="bg-[#6358DC] flex">
@@ -89,21 +87,24 @@ useEffect(() => {
         <div className="w-1/2 border border-x-white flex flex-col items-center justify-center gap-4">
           <div>
             <h1 className="text-5xl font-extrabold">
-              Welcome To <br />{" "}
+              Welcome To <br />
               <span className="text-5xl text-white">SHOP.CO</span>
             </h1>
           </div>
+
+        
           <div className="flex flex-col gap-6">
-          
             <button
-              className="flex  justify-center items-center w-96 text-2xl font-light border gap-2 border-black rounded-lg transition-transform hover:scale-105 duration-200"
+              className="flex justify-center items-center w-96 text-2xl font-light border gap-2 border-black rounded-lg transition-transform hover:scale-105 duration-200"
               onClick={GoogleAuth}
             >
               {data?.login || data?.signup} With Google
               <FcGoogle />
             </button>
           </div>
+
           <p className="text-2xl font-light text-center">or</p>
+
 
           <div>
             <form
@@ -145,6 +146,3 @@ useEffect(() => {
 };
 
 export default Forms;
-
-
-
