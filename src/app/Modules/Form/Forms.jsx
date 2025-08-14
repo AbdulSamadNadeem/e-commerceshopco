@@ -67,13 +67,15 @@ const Forms = ({ data }) => {
       num = 1;
     }
   };
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        router.push("/home");
-      }
-    });
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      router.push("/home");
+    }
   });
+
+  return () => unsubscribe();
+}, [router]);
   return (
     <>
       <div className="bg-[#6358DC] flex">
@@ -143,5 +145,6 @@ const Forms = ({ data }) => {
 };
 
 export default Forms;
+
 
 
