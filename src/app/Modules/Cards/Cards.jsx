@@ -42,12 +42,12 @@ const Cards = ({ type }) => {
   };
 
   useEffect(() => {
-    AOS.init();
+     AOS.init({ once: true });
   }, []);
 
   if (!productsWithImageUrls || productsWithImageUrls.length === 0) {
     return (
-      <div className="flex justify-center items-center mt-8 text-xl font-light">
+      <div className="flex justify-center items-center mt-8 text-black text-xl font-light">
         Loading...
       </div>
     );
@@ -108,3 +108,4 @@ const Cards = ({ type }) => {
 };
 
 export default Cards;
+
