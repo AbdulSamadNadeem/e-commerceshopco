@@ -70,7 +70,7 @@ const Forms = ({ data }) => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        router.push("/login");
+        router.push("/home");
       }
     });
   });
@@ -143,4 +143,5 @@ const Forms = ({ data }) => {
 };
 
 export default Forms;
+
 
