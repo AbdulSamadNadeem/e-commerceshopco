@@ -42,7 +42,12 @@ const Cards = ({ type }) => {
   };
 
   useEffect(() => {
-     AOS.init({ once: true });
+    
+    const timer = setTimeout(() => {
+      AOS.init({ once: true });
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   if (!productsWithImageUrls || productsWithImageUrls.length === 0) {
@@ -54,15 +59,13 @@ const Cards = ({ type }) => {
   }
 
   return (
-    <div
-      className="flex flex-wrap justify-center gap-16 mt-8 cursor-pointer"
-      data-aos="fade-right"
-    >
+    <div className="flex flex-wrap justify-center gap-16 mt-8 cursor-pointer">
       {Data?.map((items, index) => (
         <div
           onClick={() => filter(items)}
           key={index}
           className="hover:scale-110 duration-300"
+          data-aos="fade-right" 
         >
           <div className="border rounded-lg">
             <img
@@ -108,4 +111,3 @@ const Cards = ({ type }) => {
 };
 
 export default Cards;
-
